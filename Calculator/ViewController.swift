@@ -12,6 +12,8 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var display: UILabel!
     
+    @IBOutlet weak var history: UILabel!
+
     var userIsInTheMiddleOfTypingANumber = false
     
     var brain = CalculatorBrain()
@@ -45,12 +47,30 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func pi() {
+    @IBAction func changeSign() {
+        if let i = display.text?.rangeOfString("-")?.startIndex {
+            display.text?.removeAtIndex(i)
+        } else {
+            display.text = "-" + display.text!
+        }
+
+        if !userIsInTheMiddleOfTypingANumber {
+            enter()
+        }
+    }
+    
+    @IBAction func enterPi(sender: UIButton) {
         if userIsInTheMiddleOfTypingANumber {
             enter()
         }
-        displayValue = M_PI
-        enter()
+        if let constant = sender.currentTitle {
+            if let result = brain.pushConstant(constant) {
+                displayValue = result
+            } else {
+                displayValue = 0
+            }
+        }
+        userIsInTheMiddleOfTypingANumber = false
     }
     
     @IBAction func operate(sender: UIButton) {
@@ -72,24 +92,24 @@ class ViewController: UIViewController {
         if let result = brain.pushOperand(displayValue) {
             displayValue = result
         } else {
-             displayValue = 0
+            displayValue = 0
         }
     }
     
     var displayValue: Double! {
         get{
-            return NSNumberFormatter().numberFromString(display.text!)?.doubleValue
+            if let result = NSNumberFormatter().numberFromString(display.text!)?.doubleValue {
+                return result
+            }
+            return nil
         }
         
         set{
-            if newValue == nil {
-                display.text = " "
-            } else {
-                display.text = "\(newValue)"
-            }
             userIsInTheMiddleOfTypingANumber = false
+
+            display.text = (newValue == nil) ? " " : "\(newValue)"
+            history.text = brain.description
         }
     }
-    
 }
 
