@@ -84,6 +84,11 @@ class CalculatorBrain {
         return evaluate()
     }
     
+    func pushOperand(symbol: String) -> Double? {
+        opStack.append(Op.Variable(symbol))
+        return evaluate()
+    }
+    
     func pushConstant(symbol: String) -> Double? {
         opStack.append(Op.Constant(symbol))
         return evaluate()
@@ -139,9 +144,7 @@ class CalculatorBrain {
     var description: String? {
         get{
             var newOpStack = opStack
-            println("STACK: \(newOpStack)")
             var (result, remainder) = description(newOpStack)
-            println("0 REMAINDER!: \(remainder)")
 
             var desc = result
             while !remainder.isEmpty {
@@ -154,7 +157,7 @@ class CalculatorBrain {
     }
     
     private func description(ops: [Op]) -> (result: String?, remainingOps: [Op]) {
-        var remainingOps = ops  //TODO: IS THIS REALLY NEEDED??????
+        var remainingOps = ops
 
         if !ops.isEmpty {
 
@@ -175,11 +178,9 @@ class CalculatorBrain {
                 return ("\(operation) ( \(operand) )", operandEvaluation.remainingOps )
             case .BinaryOperation(let operation, _):
                 let op1Evaluation = description(remainingOps)
-                println("1  REMAINDER: \(remainingOps)")
 
                 if let operand1 = op1Evaluation.result {
                     let op2Evaluation = description(op1Evaluation.remainingOps)
-                    println("2   REMAINDER: \(op1Evaluation.remainingOps)")
 
                     if let operand2 = op2Evaluation.result {
                         return ("(\(operand2) \(operation) \(operand1))", op2Evaluation.remainingOps)
@@ -189,7 +190,6 @@ class CalculatorBrain {
                 }
             }
         }
-        println("_ REMAINDER: \(remainingOps)")
         return (nil, remainingOps)
     }
 }

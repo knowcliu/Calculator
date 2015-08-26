@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     @IBAction func clear() {
         userIsInTheMiddleOfTypingANumber = false
         brain.clear()
+        brain.variableValues.removeAll()
         displayValue = 0
     }
     
@@ -64,11 +65,7 @@ class ViewController: UIViewController {
             enter()
         }
         if let constant = sender.currentTitle {
-            if let result = brain.pushConstant(constant) {
-                displayValue = result
-            } else {
-                displayValue = 0
-            }
+            displayValue = brain.pushConstant(constant)
         }
         userIsInTheMiddleOfTypingANumber = false
     }
@@ -79,21 +76,27 @@ class ViewController: UIViewController {
         }
         
         if let operation = sender.currentTitle {
-            if let result = brain.performOperation(operation) {
-                displayValue = result
-            } else {
-                displayValue = 0
-            }
+            displayValue = brain.performOperation(operation)
         }
+    }
+    
+    @IBAction func memoryAdd() { // ->M 
+        userIsInTheMiddleOfTypingANumber = false
+        brain.variableValues["M"] = displayValue
+        displayValue = brain.evaluate()
+    }
+    
+    @IBAction func memoryRecall() {  // M
+        if userIsInTheMiddleOfTypingANumber {
+            enter()
+        }
+        displayValue = brain.variableValues["M"]
+        displayValue = brain.pushOperand("M")
     }
     
     @IBAction func enter() {
         userIsInTheMiddleOfTypingANumber = false
-        if let result = brain.pushOperand(displayValue) {
-            displayValue = result
-        } else {
-            displayValue = 0
-        }
+        displayValue = brain.pushOperand(displayValue)
     }
     
     var displayValue: Double! {
