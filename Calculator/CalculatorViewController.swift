@@ -8,8 +8,24 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
 
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if let gvc = segue.destinationViewController as? GraphViewController {
+            if let identifier = segue.identifier {
+                switch identifier {
+                    case "showGraph":
+                        // XXX this isn't really going to work like this
+                        // I need to be able to evaluate the program given X values of M
+                        gvc.brain = brain
+                    println("showGraph")
+                default:
+                    println("no segue")
+                }
+            }
+        }
+    }
+    
     @IBOutlet weak var display: UILabel!
     
     @IBOutlet weak var history: UILabel!

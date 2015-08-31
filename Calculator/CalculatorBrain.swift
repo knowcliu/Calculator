@@ -143,16 +143,14 @@ class CalculatorBrain {
     
     var description: String? {
         get{
-            var newOpStack = opStack
-            var (result, remainder) = description(newOpStack)
+            var (result, remainder) = description(opStack)
 
-            var desc = result
             while !remainder.isEmpty {
-                let (result, newRemainder) = description(remainder)
-                desc = "\(result!), \(desc!)"
+                let (desc, newRemainder) = description(remainder)
+                result = "\(desc!), \(result!)"
                 remainder = newRemainder
             }
-            return desc
+            return result
         }
     }
     
