@@ -30,10 +30,6 @@ class GraphView: UIView {
         }
     }
     
-    func bezierPathForValues(xVals: [CGFloat], yVals: [CGFloat]) {
-    
-    }
-    
     override func drawRect(rect: CGRect) {
         AxesDrawer().drawAxesInRect(self.bounds, origin: origin, pointsPerUnit: scale)
         let points = dataSource?.pointsForGraph(self) ?? [CGPoint]()
@@ -43,6 +39,7 @@ class GraphView: UIView {
         for point in points {
             var pointToDraw = CGPoint(x: (center.x + (point.x * scale)), y: center.y + (point.y * scale))
             
+            // TODO: Handle discountinuous graphs
             if drawing {
                 path.addLineToPoint(pointToDraw)
                 println("ADDITIONAL POINT: \(pointToDraw.x) \(pointToDraw.y)")

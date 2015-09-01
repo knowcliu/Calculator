@@ -25,7 +25,6 @@ class GraphViewController: UIViewController, GraphViewDataSource {
             graphView.center = CGPoint(x: location.x, y: location.y )
         default: break
         }
-        
     }
     
     @IBAction func move(gesture: UIPanGestureRecognizer) {
@@ -59,13 +58,13 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     */
     func pointsForGraph(sender: GraphView) -> [CGPoint] {
         var points = [CGPoint]()
-        // TODO is bounds.minX the right thing? I want this to be the x-axis coordinates
         for var x = sender.bounds.minX; x <= sender.bounds.maxX; x++ {
-            // need to re-calculate what x is given the bounds should be within an equal range of -x to +x
+            // need to re-calculate x given the bounds should be within an equal range of -x to +x
             var xval = (x - sender.center.x) / sender.scale
             brain?.variableValues["M"] = Double(xval)
+            // TODO: When the graphView gets manipulated by a gesture we may hav to re-calculate this?
             if let result = brain?.evaluate() {
-                var yval = CGFloat(result) // sender.center.y - CGFloat(result) * sender.scale
+                var yval = CGFloat(result)
                 points.append(CGPoint(x: xval, y: yval))
             }
         }
