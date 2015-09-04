@@ -31,13 +31,14 @@ class GraphView: UIView {
     }
     
     override func drawRect(rect: CGRect) {
+        // TODO: Set the contentScaleFactor for AxesDrawer
         AxesDrawer().drawAxesInRect(self.bounds, origin: origin, pointsPerUnit: scale)
         let points = dataSource?.pointsForGraph(self) ?? [CGPoint]()
         let path = UIBezierPath()
         path.lineWidth = 0.5
         var drawing = false
         for point in points {
-            var pointToDraw = CGPoint(x: (center.x + (point.x * scale)), y: center.y + (point.y * scale))
+            var pointToDraw = CGPoint(x: (bounds.midX + (point.x * scale)), y: bounds.midY - (point.y * scale))
             
             // TODO: Handle discountinuous graphs
             if drawing {

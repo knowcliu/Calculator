@@ -15,8 +15,6 @@ class CalculatorViewController: UIViewController {
             if let identifier = segue.identifier {
                 switch identifier {
                     case "showGraph":
-                        // XXX this isn't really going to work like this
-                        // I need to be able to evaluate the program given X values of M
                         gvc.brain = brain
                     println("showGraph")
                 default:
@@ -117,17 +115,14 @@ class CalculatorViewController: UIViewController {
     
     var displayValue: Double! {
         get{
-            if let result = NSNumberFormatter().numberFromString(display.text!)?.doubleValue {
-                return result
-            }
-            return nil
+            return NSNumberFormatter().numberFromString(display.text!)?.doubleValue
         }
         
         set{
             userIsInTheMiddleOfTypingANumber = false
 
             display.text = (newValue == nil) ? " " : "\(newValue)"
-            history.text = brain.description
+            history.text = brain.description ?? "history"
         }
     }
 }
